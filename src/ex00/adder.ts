@@ -1,5 +1,5 @@
 export const adder = (a: number, b: number): number => {
-  if (b === 0) return a;
+  if (b == 0) return a;
 
   // 1. XOR do add without considering carry bits
   // ex) 1 ^ 0 = 1

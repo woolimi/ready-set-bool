@@ -12,6 +12,4 @@ const calc = (a: number, b: number) => {
 };
 
 calc(1, 1);
-calc(-1, 1);
 calc(123, 38927);
-calc(78, -42);
