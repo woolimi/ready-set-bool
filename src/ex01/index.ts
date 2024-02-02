@@ -11,5 +11,6 @@ const calc = (a: number, b: number) => {
   console.log("Is equal?", original === myFunction ? green("OK") : red("KO"));
 };
 
-calc(-3, 13);
+calc(3, 13);
 calc(13, 23);
+calc(23, -33);
