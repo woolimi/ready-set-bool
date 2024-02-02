@@ -6,6 +6,7 @@
     "lib": ["ES6"],
     "strict": true,
     "skipLibCheck": true,
-    "moduleResolution": "nodenext"
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
   }
 }

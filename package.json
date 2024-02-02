@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "build": "tsc",
-    "start": "node build/index.js",
+    "start": "node",
     "dev": "tsx watch"
   },
   "keywords": [],
