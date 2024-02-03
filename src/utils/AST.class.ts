@@ -84,7 +84,11 @@ export class AST {
 
       this.root = stack[0];
     } catch (error: any) {
-      console.error(error.message);
+      if (error.message) {
+        console.error(error.message);
+      } else {
+        console.error(error);
+      }
     } finally {
       return this;
     }
