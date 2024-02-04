@@ -1,4 +1,8 @@
-type TokenType = "operator" | "operand";
+import { pipe, range, map, fromEntries, isNil, join, toArray } from "@fxts/core";
+import { nSquare } from "./math";
+import { nArray } from "./helper";
+
+type TokenType = "operator" | "operand" | "variable" | "missing";
 type AstOperators = {
   [key: string]: Function;
 };
@@ -10,13 +14,14 @@ type AstLabels = {
 };
 
 class Node {
-  type?: TokenType;
-  token?: boolean | string;
+  type: TokenType;
+  token: string;
   left?: Node;
   right?: Node;
 
-  constructor(token?: boolean | string) {
+  constructor(token: string) {
     this.token = token;
+    this.type = "missing";
   }
 }
 
@@ -24,6 +29,7 @@ class Node {
 export class AST {
   public formula: string;
   public root?: Node;
+  public variables: Map<string, boolean | undefined>;
   public static operators: AstOperators = {
     "&": (a: boolean, b: boolean) => a && b,
     "|": (a: boolean, b: boolean) => a || b,
@@ -45,10 +51,16 @@ export class AST {
     "^": "⊕",
     "=": "⇔",
     ">": "⇒",
+    ...pipe(
+      range(26),
+      map((i): [string, string] => [String.fromCharCode(i + 65), String.fromCharCode(i + 65)]),
+      fromEntries,
+    ),
   };
 
   constructor(formula: string) {
     this.formula = formula;
+    this.variables = new Map();
   }
 
   public parse() {
@@ -66,21 +78,19 @@ export class AST {
 
         if (AST.operands.hasOwnProperty(token)) {
           node.type = "operand";
-        } else {
+        } else if (AST.operators.hasOwnProperty(token)) {
           node.type = "operator";
-
-          if (!AST.isBinaryOperator(token)) {
-            node.right = stack.pop();
-            if (!node.right) throw new Error("[AST parse error]: invalid RPN expression");
-          }
-          node.left = stack.pop();
-          if (!node.left) throw new Error("[AST parse error]: invalid RPN expression");
+          AST.combineOperandsToOperator(stack, node);
+        } else {
+          node.type = "variable";
+          this.variables.set(token, undefined);
         }
 
         stack.push(node);
       }
 
-      if (!stack[0]) throw new Error("[AST parse error]: root is empty");
+      if (!stack[0]) throw new Error("[AST parse error]: Root node is empty");
+      if (stack[0].type !== "operator") throw new Error("[AST parse error]: Too many operators or variables");
 
       this.root = stack[0];
     } catch (error: any) {
@@ -98,39 +108,88 @@ export class AST {
     if (!this.root) {
       return undefined;
     }
-
-    return AST._compute(this.root);
+    return this._compute(this.root);
   }
 
-  private static _compute(node: Node): boolean {
-    if (node?.type === "operand") {
-      return AST.operands[node.token as string];
+  public printTruthTable() {
+    const header = pipe(
+      [...this.variables, ["=", undefined]],
+      map(([k, _]) => k),
+      join(" | "),
+      (str) => `| ${str} |`,
+    );
+    const divider = pipe(
+      range(this.variables.size + 1),
+      map(() => "---"),
+      join("|"),
+      (str) => `|${str}|`,
+    );
+
+    console.log(header);
+    console.log(divider);
+
+    // binary number's digits
+    const digits = this.variables.size;
+    // total number of combinations
+    const nbTotal = nSquare(2, digits);
+    const maxNum = nbTotal - 1;
+
+    for (let testCase = 0; testCase < nbTotal; testCase++) {
+      const flags = maxNum & testCase;
     }
-    const f = AST.operators[node?.token as string];
-    return AST.isBinaryOperator(node?.token as string)
-      ? f(AST._compute(node?.left as Node))
-      : f(AST._compute(node?.right as Node), AST._compute(node?.left as Node));
+    // console.log(this.compute());
   }
-  static tokenize(rpn: string): string[] {
+
+  /**
+   * private methods
+   */
+  private _compute(node: Node): boolean {
+    if (node.type === "variable") {
+      if (isNil(this.variables.get(node.token)))
+        throw new Error(`[AST compute error]: Cannot calculate variable ${node.token}`);
+
+      return this.variables.get(node.token) as boolean;
+    }
+
+    if (node.type === "operand") {
+      return AST.operands[node.token];
+    }
+
+    const f = AST.operators[node.token];
+    return AST.isBinaryOperator(node.token)
+      ? f(this._compute(node.left as Node))
+      : f(this._compute(node.right as Node), this._compute(node.left as Node));
+  }
+
+  private static tokenize(rpn: string): string[] {
     const keywords = AST.getValidTokens().map((k) => k);
     const regExp = new RegExp(`|${keywords.join("|")}|`);
     const tokens = rpn.split(regExp);
     return tokens.filter((token) => !!token);
   }
-  static getValidTokens(): string[] {
-    return [...Object.keys(this.operators), ...Object.keys(this.operands)];
+
+  private static getValidTokens(): string[] {
+    return Object.keys(AST.labels);
   }
-  static isBinaryOperator(token: string): boolean {
+
+  private static isBinaryOperator(token: string): boolean {
     const f = AST.operators[token];
     return f.length === 1;
   }
-  static isValidToken(token: string, idx: number): boolean {
-    const tokens = AST.getValidTokens();
-    const ops = Object.keys(AST.operators);
 
-    if (idx === 0 && ops.includes(token)) {
+  private static isValidToken(token: string, idx: number): boolean {
+    if (idx === 0 && AST.operators.hasOwnProperty(token)) {
       return false;
     }
-    return tokens.includes(token);
+    return AST.labels.hasOwnProperty(token);
+  }
+
+  private static combineOperandsToOperator(stack: Node[], node: Node) {
+    if (!AST.isBinaryOperator(node.token)) {
+      node.right = stack.pop();
+      if (!node.right) throw new Error(`[AST parse error]: Missing operands on ${node.token}`);
+    }
+    node.left = stack.pop();
+    if (!node.left) throw new Error(`[AST parse error]: Missing operands on ${node.token}`);
   }
 }

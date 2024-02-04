@@ -9,7 +9,7 @@ const calc = (formula: string) => {
   console.log(`Output: ${isUndefined(result) ? undefined : result ? blue("T") : red("F")}`);
 };
 
-calc("10&");
+calc("10A&");
 calc("10|");
 calc("11>");
 calc("10=");

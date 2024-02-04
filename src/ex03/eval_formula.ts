@@ -5,8 +5,8 @@ export const eval_formula = (formula: string): boolean | undefined => {
     const tree = new AST(formula);
 
     return tree.parse().compute();
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    console.log(error?.mesage || error);
     return false;
   }
 };
