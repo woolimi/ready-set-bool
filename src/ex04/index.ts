@@ -8,6 +8,6 @@ const calc = (formula: string) => {
 };
 
 calc("AB|");
-// calc("11>");
-// calc("10=");
-// calc("1011||=");
+calc("AB&C|");
+calc("AA&C|");
+calc("AZ&C!|");

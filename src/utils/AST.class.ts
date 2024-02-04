@@ -1,6 +1,5 @@
-import { pipe, range, map, fromEntries, isNil, join, toArray } from "@fxts/core";
-import { nSquare } from "./math";
-import { nArray } from "./helper";
+import { pipe, range, map, fromEntries, isNil, join, toArray, reverse } from "@fxts/core";
+import { boolToStr } from "./helper";
 
 type TokenType = "operator" | "operand" | "variable" | "missing";
 type AstOperators = {
@@ -128,16 +127,30 @@ export class AST {
     console.log(header);
     console.log(divider);
 
-    // binary number's digits
-    const digits = this.variables.size;
-    // total number of combinations
-    const nbTotal = nSquare(2, digits);
-    const maxNum = nbTotal - 1;
+    const nbVars = this.variables.size;
+    const nbTotalCase = 2 ** nbVars;
+    const maxNum = nbTotalCase - 1;
+    const variableArray = pipe(
+      this.variables,
+      map(([k, _]) => k),
+      reverse,
+      toArray,
+    );
 
-    for (let testCase = 0; testCase < nbTotal; testCase++) {
-      const flags = maxNum & testCase;
+    for (let testCase = 0; testCase < nbTotalCase; testCase++) {
+      let flags = maxNum & testCase;
+      for (let i = 0; i < nbVars; i++) {
+        const key = variableArray[i][0];
+        this.variables.set(key, !!(flags & 1));
+        flags = flags >> 1;
+      }
+      const row = pipe(
+        this.variables,
+        map(([_, v]) => boolToStr(!!v)),
+        toArray,
+      );
+      console.log(`| ${[...row, boolToStr(!!this.compute())].join(" | ")} |`);
     }
-    // console.log(this.compute());
   }
 
   /**

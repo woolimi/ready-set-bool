@@ -1,3 +1,3 @@
-export const nArray = (n: number): any[] => {
-  return new Array(n).fill(0);
+export const boolToStr = (bool: boolean): string => {
+  return bool ? "1" : "0";
 };
