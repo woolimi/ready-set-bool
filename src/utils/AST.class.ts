@@ -88,8 +88,9 @@ export class AST {
         stack.push(node);
       }
 
-      if (!stack[0]) throw new Error("[AST parse error]: Root node is empty");
-      if (stack[0].type !== "operator") throw new Error("[AST parse error]: Too many operators or variables");
+      if (stack.length === 0) throw new Error("[AST parse error]: Root node is empty");
+      if (stack.length > 1 && stack[0].type !== "operator")
+        throw new Error("[AST parse error]: Too many operators or variables");
 
       this.root = stack[0];
     } catch (error: any) {
@@ -171,7 +172,7 @@ export class AST {
     const f = AST.operators[node.token];
     return AST.isBinaryOperator(node.token)
       ? f(this._compute(node.left as Node))
-      : f(this._compute(node.right as Node), this._compute(node.left as Node));
+      : f(this._compute(node.left as Node), this._compute(node.right as Node));
   }
 
   private static tokenize(rpn: string): string[] {
