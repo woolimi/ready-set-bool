@@ -8,6 +8,6 @@ const calc = (formula: string) => {
 
 calc("AB>");
 calc("AB>A>A>");
-// calc("AB&C|");
-// calc("AA&C|");
-// calc("AZ&C!|");
+calc("AB&C|");
+calc("AA&C|");
+calc("AZ&C!|");

@@ -1,12 +1,12 @@
-import { AST } from "../utils/AST.class";
+import { AST, compute } from "../AbstractSyntaxTree";
 
 export const eval_formula = (formula: string): boolean | undefined => {
   try {
     const tree = new AST(formula);
 
-    return tree.parse().compute();
+    return compute(tree);
   } catch (error: any) {
-    console.log(error?.mesage || error);
+    console.log(error?.message || error);
     return false;
   }
 };
