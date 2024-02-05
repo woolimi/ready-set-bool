@@ -6,8 +6,9 @@ const calc = (formula: string) => {
   print_truth_table(formula);
 };
 
-calc("AB>");
-calc("AB>A>A>");
-calc("AB&C|");
-calc("AA&C|");
-calc("AZ&C!|");
+// calc("AB>");
+// calc("AB>A>A>");
+// calc("AB&C|");
+// calc("AA&C|");
+// calc("AZ&C!|");
+calc("AB&C>");

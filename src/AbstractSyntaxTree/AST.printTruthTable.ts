@@ -1,4 +1,4 @@
-import { pipe, range, map, join, toArray, reverse } from "@fxts/core";
+import { pipe, range, map, join, toArray, reverse, isUndefined } from "@fxts/core";
 import { AST } from "./AST.class";
 import { compute } from "./AST.compute";
 
@@ -55,6 +55,8 @@ const printBody = (tree: AST) => {
 };
 
 export const printTruthTable = (tree: AST) => {
+  if (!tree.root) return;
+
   printHeader(tree);
   printDivider(tree);
   printBody(tree);

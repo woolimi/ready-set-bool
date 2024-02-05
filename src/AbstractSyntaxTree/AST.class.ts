@@ -19,9 +19,9 @@ export class Node {
   left?: Node;
   right?: Node;
 
-  constructor(token: string) {
+  constructor(token: string, type: TokenType = "missing") {
     this.token = token;
-    this.type = "missing";
+    this.type = type;
   }
 }
 
@@ -74,7 +74,7 @@ export class AST {
         const node = new Node(token);
 
         if (!AST.isValidToken(token, i)) {
-          throw new Error(`[AST parse error]: Invalid token: ${token} at ${i}`);
+          throw new Error(`[AST parse error]: Invalid token: ${token} at ${i + 1}`);
         }
 
         if (AST.operands.hasOwnProperty(token)) {
@@ -91,16 +91,12 @@ export class AST {
       }
 
       if (stack.length === 0) throw new Error("[AST parse error]: Root node is empty");
-      if (stack.length > 1 && stack[0].type !== "operator")
-        throw new Error("[AST parse error]: Too many operators or variables");
+      if (stack.length > 1) throw new Error("[AST parse error]: Too many operators or variables");
 
       this.root = stack[0];
     } catch (error: any) {
-      if (error.message) {
-        console.error(error.message);
-      } else {
-        console.error(error);
-      }
+      console.error(error.message || error);
+      this.root = undefined;
     } finally {
       return this;
     }
