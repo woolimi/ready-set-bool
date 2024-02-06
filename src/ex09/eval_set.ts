@@ -1,6 +1,7 @@
 import { AST, compute } from "../AbstractSyntaxTree";
 
 export const eval_set = (formula: string, sets: Array<Array<number>>): Array<number> => {
+  const tree = new AST(formula);
   AST.operators = {
     "&": (a: Array<number>, b: Array<number>) => {
       const setA = new Set(a);
@@ -30,19 +31,24 @@ export const eval_set = (formula: string, sets: Array<Array<number>>): Array<num
       const setA = new Set(a);
       const setB = new Set(b);
 
-      return [...setB].filter((x) => !setA.has(x));
+      return [...setB];
     },
-    "!": (a: Array<number>, b: Array<number>) => {
+    "!": (a: Array<number>) => {
       const setA = new Set(a);
-      const setB = new Set(b);
+      const global = tree.variables.get("Global") || [];
+      return global.filter((e) => !setA.has(e));
     },
   };
-  const tree = new AST(formula);
   const variablesArr = [...tree.variables];
 
   sets.forEach((set, idx) => {
-    variablesArr[idx][1] = set;
+    if (variablesArr[idx]) {
+      variablesArr[idx][1] = set;
+    } else {
+      variablesArr.push(["Global", set]);
+    }
   });
+
   tree.variables = new Map(variablesArr);
 
   return compute(tree);
