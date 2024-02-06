@@ -12,10 +12,17 @@ const calc = (formula: string) => {
 };
 
 console.log("[ EX06 ]");
-calc("AB&!");
-calc("AB|!");
-calc("AB|C&");
-calc("AB|C|D|");
-calc("AB&C&D&");
-calc("AB&!C!|");
-calc("AB|!C!&");
+// calc("AB&!");
+// calc("AB|!");
+// calc("AB|C&");
+// calc("AB|C|D|");
+// calc("AB&C&D&");
+// calc("AB&!C!|");
+// calc("AB|!C!&");
+
+calc("ABC||");
+calc("ABC||!");
+calc("ABC|&");
+calc("ABC&|!");
+calc("ABC^^");
+calc("ABC>>");

@@ -18,6 +18,30 @@ const applyMaterialCondition = (node: Node) => {
   }
 };
 
+const applyEliminateXor = (node: Node) => {
+  if (node.token === "^") {
+    node.token = "|";
+    const A = node.left as Node;
+    const B = node.right as Node;
+    node.left = new Node("&", "operator");
+    node.right = new Node("&", "operator");
+
+    node.left.left = new Node("!", "operator");
+    node.left.left.left = cloneDeep(A);
+    node.left.right = cloneDeep(B);
+
+    node.right.left = cloneDeep(A);
+    node.right.right = new Node("!", "operator");
+    node.right.right.left = cloneDeep(B);
+  }
+  if (node.right) {
+    applyEliminateXor(node.right);
+  }
+  if (node.left) {
+    applyEliminateXor(node.left);
+  }
+};
+
 const applyEquivalence = (node: Node) => {
   // change "AB=" to "AB&A!B!&|"
 
@@ -88,6 +112,7 @@ export const nnf = (tree: AST): AST => {
   if (!tree.root) return tree;
 
   applyMaterialCondition(tree.root);
+  applyEliminateXor(tree.root);
   applyEquivalence(tree.root);
   applyDemorgan(tree.root);
   applyDoubleNegationElimination(tree.root);
