@@ -1,4 +1,4 @@
-import { AST, treeToFormula, cnf } from "../AbstractSyntaxTree";
+import { AST, cnf, treeToFormula } from "../AbstractSyntaxTree";
 import { pipe } from "@fxts/core";
 
 export const conjunctive_normal_form = (formula: string): string => {
