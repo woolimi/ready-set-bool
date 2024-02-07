@@ -10,3 +10,4 @@ export const map = (x: number, y: number): number | undefined => {
     console.error(error.message || error);
     return undefined;
   }
+};

@@ -4,8 +4,8 @@
   "description": "",
   "scripts": {
     "build": "tsc",
-    "start": "node",
-    "dev": "tsx watch"
+    "dev": "tsx watch",
+    "start": "tsx"
   },
   "keywords": [],
   "author": "",

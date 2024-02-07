@@ -1,10 +1,10 @@
-import { AST, compute } from "../AbstractSyntaxTree";
+import { ASTBool } from "../AbstractSyntaxTree";
 
 export const eval_formula = (formula: string): boolean | undefined => {
   try {
-    const tree = new AST(formula);
+    const tree = new ASTBool(formula);
 
-    return compute(tree);
+    return tree.compute();
   } catch (error: any) {
     console.log(error?.message || error);
     return false;

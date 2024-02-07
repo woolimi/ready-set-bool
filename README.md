@@ -1,5 +1,7 @@
 # Ready, Set, Boole!
 
+An introduction to Boolean Algebra
+
 ## Preparation
 
 ```bash
@@ -11,21 +13,13 @@ npm install
 ```bash
 npm run dev src/ex00
 npm run dev src/ex01
-npm run dev src/ex02
 		...
 ```
 
-## Build
+## Evaluation
 
 ```bash
-npm run build
-```
-
-## Run
-
-```bash
-npm start build/ex00
-npm start build/ex01
-npm start build/ex02
+npm start src/ex00
+npm start src/ex01
 		...
 ```

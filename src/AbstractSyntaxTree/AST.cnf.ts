@@ -1,8 +1,5 @@
-import { treeToFormula } from ".";
-import { AST, Node } from "./AST.class";
+import { Node, ASTBool } from "./AST.class";
 import { makeTruthTable } from "./AST.printTruthTable";
-import { pipe } from "@fxts/core";
-import { cloneDeep } from "lodash-es";
 
 // https://www.youtube.com/watch?v=2cgHa02s_SA
 // 1. make a truth table
@@ -13,7 +10,7 @@ import { cloneDeep } from "lodash-es";
 //    (A ∨ ¬B) ∧ (¬A ∨ B)
 //     A B! | A! B | &
 
-const makeDNF = (tree: AST, table: boolean[][]): AST => {
+const makeDNF = (tree: ASTBool, table: boolean[][]): ASTBool => {
   table = [...table.filter((r) => !r[r.length - 1])];
   const variables = [...tree.variables];
   const dnf = [];
@@ -30,7 +27,7 @@ const makeDNF = (tree: AST, table: boolean[][]): AST => {
   }
   const newFormula = dnf.join("") + "|".repeat(table.length - 1);
 
-  return new AST(newFormula);
+  return new ASTBool(newFormula);
 };
 
 const negate = (node: Node) => {
@@ -55,7 +52,7 @@ const negate = (node: Node) => {
   }
 };
 
-export const cnf = (tree: AST): AST => {
+export const cnf = (tree: ASTBool): ASTBool => {
   if (!tree.root) return tree;
 
   const table = makeTruthTable(tree);

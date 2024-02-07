@@ -13,3 +13,9 @@ const calc = (a: number, b: number) => {
 
 calc(1, 1);
 calc(123, 38927);
+calc(0, 0);
+calc(1, 0);
+calc(0, 1);
+calc(1, 1);
+calc(1, 2);
+calc(2, 2);

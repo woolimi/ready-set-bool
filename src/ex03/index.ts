@@ -9,8 +9,29 @@ const calc = (formula: string) => {
   console.log(`Output: ${isUndefined(result) ? undefined : result ? blue("T") : red("F")}`);
 };
 
-calc("10A&");
-calc("10|");
-calc("11>");
-calc("10=");
-calc("1011||=");
+// calc("0!");
+// calc("1!");
+// calc("00|");
+// calc("10|");
+// calc("01|");
+// calc("11|");
+// calc("10&");
+// calc("11&");
+// calc("11^");
+// calc("10^");
+// calc("00>");
+// calc("01>");
+// calc("10>");
+// calc("11>");
+// calc("00=");
+// calc("11=");
+// calc("10=");
+// calc("01=");
+
+calc("11&0|");
+calc("10&1|");
+calc("11&1|");
+calc("11&1|1^");
+calc("01&1|1=");
+calc("01&1&1&");
+calc("0111&&&");

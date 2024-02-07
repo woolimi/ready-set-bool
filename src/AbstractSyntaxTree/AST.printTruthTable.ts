@@ -1,12 +1,11 @@
-import { pipe, range, map, join, toArray, reverse, isUndefined } from "@fxts/core";
+import { pipe, range, map, join, toArray, reverse } from "@fxts/core";
 import { AST } from "./AST.class";
-import { compute } from "./AST.compute";
 
 const boolToNum = (bool: boolean): number => {
   return bool ? 1 : 0;
 };
 
-const printHeader = (tree: AST) => {
+const printHeader = (tree: AST<boolean>) => {
   const header = pipe(
     [...tree.variables, ["=", undefined]],
     map(([k, _]) => k),
@@ -16,7 +15,7 @@ const printHeader = (tree: AST) => {
   console.log(header);
 };
 
-const printDivider = (tree: AST) => {
+const printDivider = (tree: AST<boolean>) => {
   const divider = pipe(
     range(tree.variables.size + 1),
     map(() => "---"),
@@ -26,7 +25,7 @@ const printDivider = (tree: AST) => {
   console.log(divider);
 };
 
-export const makeTruthTable = (tree: AST): boolean[][] => {
+export const makeTruthTable = (tree: AST<boolean>): boolean[][] => {
   const variables = tree.variables;
   const nbVars = variables.size;
   const nbTotalCase = 2 ** nbVars;
@@ -50,12 +49,12 @@ export const makeTruthTable = (tree: AST): boolean[][] => {
       map(([_, v]) => !!v),
       toArray,
     );
-    result.push([...row, !!compute(tree)]);
+    result.push([...row, !!tree.compute()]);
   }
   return result;
 };
 
-const printBody = (tree: AST) => {
+const printBody = (tree: AST<boolean>) => {
   const table = makeTruthTable(tree);
 
   for (const row of table) {
@@ -63,7 +62,7 @@ const printBody = (tree: AST) => {
   }
 };
 
-export const printTruthTable = (tree: AST) => {
+export const printTruthTable = (tree: AST<boolean>) => {
   if (!tree.root) return;
 
   printHeader(tree);

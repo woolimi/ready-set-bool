@@ -1,5 +1,6 @@
-import { AST, Node } from "./AST.class";
-import { cloneDeep } from "lodash-es";
+import { ASTBool, Node } from "./AST.class";
+
+const cloneDeep = require("lodash-es/cloneDeep");
 
 const applyMaterialCondition = (node: Node) => {
   // Change "AB>" to "!AB|"
@@ -108,7 +109,7 @@ const applyDoubleNegationElimination = (node: Node) => {
   }
 };
 
-export const nnf = (tree: AST): AST => {
+export const nnf = (tree: ASTBool): ASTBool => {
   if (!tree.root) return tree;
 
   applyMaterialCondition(tree.root);

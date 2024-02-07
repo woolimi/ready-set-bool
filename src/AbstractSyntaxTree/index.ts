@@ -1,5 +1,4 @@
-export { AST } from "./AST.class";
-export { compute } from "./AST.compute";
+export { ASTBool, ASTSet } from "./AST.class";
 export { printTruthTable, makeTruthTable } from "./AST.printTruthTable";
 export { cnf } from "./AST.cnf";
 export { nnf } from "./AST.nnf";
