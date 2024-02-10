@@ -8,14 +8,14 @@ const calc = (formula: string) => {
   print_truth_table(formula);
 };
 
-// calc("A");
-// calc("A!");
-// calc("AB|");
-// calc("AB&");
-// calc("AB^");
-// calc("AB>");
-// calc("AB=");
-// calc("AA=");
+calc("A");
+calc("A!");
+calc("AB|");
+calc("AB&");
+calc("AB^");
+calc("AB>");
+calc("AB=");
+calc("AA=");
 
 calc("ABC==");
 calc("AB>C>");

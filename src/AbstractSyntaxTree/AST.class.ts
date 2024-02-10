@@ -172,6 +172,7 @@ export class ASTSet extends AST<Array<number>> {
         map((i) => String.fromCharCode(i + 65)),
       ),
     ]);
+
     this.parse();
 
     // Update variables with sets
@@ -180,7 +181,7 @@ export class ASTSet extends AST<Array<number>> {
       if (variablesArr[idx]) {
         variablesArr[idx][1] = set;
       } else {
-        variablesArr.push(["Global", set]);
+        throw new Error("[ASTSet error]: Variable not found");
       }
     });
     this.variables = new Map(variablesArr);
@@ -212,15 +213,16 @@ export class ASTSet extends AST<Array<number>> {
         return setA.size === setB.size && [...setA].every((x) => setB.has(x));
       },
       ">": (a: Array<number>, b: Array<number>) => {
-        const global = new Set(this.variables.get("Global"));
+        const setA = new Set(a);
+        const global = [...this.variables.values()].flat().filter((x) => !setA.has(x as number));
 
         return [...new Set([...b, ...global])];
       },
       "!": (a: Array<number>) => {
         const setA = new Set(a);
-        const global = new Set(this.variables.get("Global"));
+        const global = new Set([...this.variables.values()].flat());
 
-        return [...global].filter((x) => !setA.has(x));
+        return [...global].filter((x) => !setA.has(x as number));
       },
     };
   }

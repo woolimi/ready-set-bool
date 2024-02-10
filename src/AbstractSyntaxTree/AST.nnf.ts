@@ -1,6 +1,5 @@
 import { ASTBool, Node } from "./AST.class";
-
-const cloneDeep = require("lodash-es/cloneDeep");
+import cloneDeep from "lodash-ts/cloneDeep";
 
 const applyMaterialCondition = (node: Node) => {
   // Change "AB>" to "!AB|"
