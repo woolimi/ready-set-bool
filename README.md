@@ -2,24 +2,18 @@
 
 An introduction to Boolean Algebra
 
-## Preparation
+## How to run
 
 ```bash
 npm install
-```
 
-## Development
-
-```bash
+# Development
 npm run dev src/ex00
 npm run dev src/ex01
-		...
-```
+  ...
 
-## Evaluation
-
-```bash
+# Evaluation
 npm start src/ex00
 npm start src/ex01
-		...
+  ...
 ```
