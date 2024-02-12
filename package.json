@@ -1,0 +1,23 @@
+{
+  "name": "ready-set-bool",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch",
+    "start": "tsx"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^16.18.79",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@fxts/core": "^0.23.0",
+    "console-log-colors": "^0.4.0",
+    "lodash-ts": "^1.2.7"
+  }
+}
